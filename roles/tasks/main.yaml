@@ -5,17 +5,20 @@
   dnf:
     name: http://rpms.litespeedtech.com/centos/litespeed-repo-1.1-1.el8.noarch.rpm
     state: present
+  tags: [add-repo]
 
-- name: check all available repository on the CentOS system
+- name: Update All Packages
   dnf:
     name: "*"
     state: latest
+  tags: [update-pkgs]
 
 - name: Install OpenLiteSpeed
   dnf:
     name: openlitespeed
     state: present
   notify: restart-openlitespeed
+  tags: [install-lsws]
 
 # Install PHP 7.4
 
@@ -23,6 +26,7 @@
   dnf:
     name: epel-release
     state: present
+  tags: [add-epel]
 
 - name: Install LSPHP packages from the official OpenLitespeed repository
   dnf:
@@ -40,6 +44,7 @@
     - "lsphp74-pdo"
     - "lsphp74-common"
     - "lsphp74-xml"
+  tags: [install_php]
 
 # Install MariaDB
 
@@ -51,6 +56,7 @@
     - "mariadb"
     - "mariadb-server"
   notify: restart-mariadb
+  tags: [install-maria]
 
 - name: mysql_root_password
   mysql_user:
@@ -60,6 +66,7 @@
     check_implicit_admin: true
     password: "{{ mysql_root_password }}"
     host: localhost
+  tags: [mysql_root_passwd]
 
 - name: remove remote root
   mysql_user:
@@ -69,6 +76,7 @@
     user: root
     host: "{{ ansible_fqdn }}"
     state: absent
+  tags: [rm-remote]
 
 # Setup Admin Authentication
 
@@ -77,6 +85,7 @@
     port: 7080/tcp
     permanent: yes
     state: enabled
+  tags: [firewall]
 
 - name: set up the OpenLitespeed dashboard authentication
   script: /usr/local/lsws/admin/misc/admpass.sh
