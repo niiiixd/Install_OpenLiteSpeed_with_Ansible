@@ -1,0 +1,84 @@
+---
+# Install OpenLightSpeed
+
+- name: Add the OpenLiteSpeed repository for CentOS 8
+  dnf:
+    name: http://rpms.litespeedtech.com/centos/litespeed-repo-1.1-1.el8.noarch.rpm
+    state: present
+
+- name: check all available repository on the CentOS system
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Install OpenLiteSpeed
+  dnf:
+    name: openlitespeed
+    state: present
+  notify: restart-openlitespeed
+
+# Install PHP 7.4
+
+- name: Add the EPEL repository to the system
+  dnf:
+    name: epel-release
+    state: present
+
+- name: Install LSPHP packages from the official OpenLitespeed repository
+  dnf:
+    name: "{{ items }}"
+    state: present
+  loop:
+    - "lsphp74"
+    - "lsphp74-mysqlnd"
+    - "lsphp74-process"
+    - "lsphp74-mbstring"
+    - "lsphp74-mcrypt"
+    - "lsphp74-gd"
+    - "lsphp74-opcache"
+    - "lsphp74-bcmath"
+    - "lsphp74-pdo"
+    - "lsphp74-common"
+    - "lsphp74-xml"
+
+# Install MariaDB
+
+- name: Install the MariaDB server
+  dnf:
+    name: "{{ items }}"
+    state: present
+  loop:
+    - "mariadb"
+    - "mariadb-server"
+  notify: restart-mariadb
+
+- name: mysql_root_password
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    user: root
+    check_implicit_admin: true
+    password: "{{ mysql_root_password }}"
+    host: localhost
+
+- name: remove remote root
+  mysql_user:
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    user: root
+    host: "{{ ansible_fqdn }}"
+    state: absent
+
+# Setup Admin Authentication
+
+- name: Add the port '7080' to the firewalld
+  firewalld:
+    port: 7080/tcp
+    permanent: yes
+    state: enabled
+
+- name: set up the OpenLitespeed dashboard authentication
+  script: /usr/local/lsws/admin/misc/admpass.sh
+  register: admpass
+- debug: var=admpass.stdout_lines
