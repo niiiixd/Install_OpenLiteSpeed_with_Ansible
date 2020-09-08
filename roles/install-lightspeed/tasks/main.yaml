@@ -17,7 +17,6 @@
   dnf:
     name: "*"
     state: latest
-    update_catch: true
   tags: [update-pkgs]
 
 - name: Install OpenLiteSpeed
