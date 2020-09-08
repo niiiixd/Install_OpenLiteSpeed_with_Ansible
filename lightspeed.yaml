@@ -2,7 +2,7 @@
 - hosts: lightspeed
   roles:
     - install-lightspeed
-    vars_prompt:
+  vars_prompt:
   - name: "dashboar_username"
     prompt: "Enter OpenLitespeed dashboar username"
     private: no
