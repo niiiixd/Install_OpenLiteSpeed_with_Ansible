@@ -61,7 +61,7 @@
 
 - name: Make sure mysqld service is running
   service:
-    name: mysqld
+    name: mariadb
     state: started
     enabled: yes
   tags: [start-db]
