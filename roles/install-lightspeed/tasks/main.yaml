@@ -81,6 +81,6 @@
   tags: [firewall]
 
 - name: set up the OpenLitespeed dashboard authentication
-  script: /usr/local/lsws/admin/misc/admpass.sh
+  command: sh /usr/local/lsws/admin/misc/admpass.sh
   register: admpass
 - debug: var=admpass.stdout_lines
