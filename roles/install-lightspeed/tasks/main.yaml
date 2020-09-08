@@ -7,6 +7,16 @@
     state: present
   tags: [add-repo]
 
+- name: Install Python3 on Centos 8
+  dnf:
+    name: python3
+    state: present
+  tags: [install-pythone]
+
+- name: Install mysql-connector-python
+  shell: pip3 install mysql-connector-python
+  tags: [connector]
+
 - name: Update All Packages
   dnf:
     name: "*"
@@ -20,8 +30,6 @@
   notify: restart-openlitespeed
   tags: [install-lsws]
 
-# Install PHP 7.4
-
 - name: Add the EPEL repository to the system
   dnf:
     name: epel-release
@@ -30,7 +38,7 @@
 
 - name: Install LSPHP packages from the official OpenLitespeed repository
   dnf:
-    name: "{{ items }}"
+    name: "{{ item }}"
     state: present
   loop:
     - "lsphp74"
@@ -46,11 +54,9 @@
     - "lsphp74-xml"
   tags: [install_php]
 
-# Install MariaDB
-
 - name: Install the MariaDB server
   dnf:
-    name: "{{ items }}"
+    name: "{{ item }}"
     state: present
   loop:
     - "mariadb"
@@ -77,8 +83,6 @@
     host: "{{ ansible_fqdn }}"
     state: absent
   tags: [rm-remote]
-
-# Setup Admin Authentication
 
 - name: Add the port '7080' to the firewalld
   firewalld:

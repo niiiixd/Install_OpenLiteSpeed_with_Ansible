@@ -1,5 +1,5 @@
 ---
-- host: lightspeed
+- hosts: lightspeed
   roles:
     - install-lightspeed
   
