@@ -17,6 +17,7 @@
   dnf:
     name: "*"
     state: latest
+    update_catch: true
   tags: [update-pkgs]
 
 - name: Install OpenLiteSpeed
@@ -57,53 +58,20 @@
   loop:
     - "mariadb"
     - "mariadb-server"
-    - "python3-PyMySQL"
-  notify: restart-mariadb
   tags: [install-maria]
 
-# MariaDB Configuration
-- name: Set MySQL root Password
-  mysql_user:
-    login_host: 'localhost'
-    login_user: 'root'
-    login_password: ''
-    name: 'root'
-    password: '{{ mariadb_root_password }}'
+- name: Make sure mysqld service is running
+  service:
+    name: mysqld
+    state: started
+    enabled: yes
+  tags: [start-db]
+
+- name: Install python3-PyMySQL library
+  dnf:
+    name: python3-PyMySQL
     state: present
-  tags: [mariadb_rootpass]
-
-- name: Set MariaDB root password for 127.0.0.1, ::1
-  mysql_user:
-    name: root
-    password: "{{ mariadb_root_password }}"
-    host: "{{ item }}"
-    login_user: root
-    login_password: "{{ mariadb_root_password }}"
-    login_unix_socket: "{{ mariadb_socket }}"
-    state: present
-  loop:
-    - " ::1 "
-    - " 127.0.0.1 "
-  tags: [mariadb_rootpass]
-
-- name: Remove the test database
-  mysql_db:
-    name: test
-    login_user: root
-    login_password: "{{ mariadb_root_password }}"
-    login_unix_socket: "{{ mariadb_socket }}"
-    state: absent
-  tags: [remove_testdb]
-
-- name: Remove anonymous users
-  mysql_user:
-    name: ''
-    host_all: true
-    login_user: root
-    login_password: "{{ mariadb_root_password }}"
-    login_unix_socket: "{{ mariadb_socket }}"
-    state: absent
-  tags: [remove_usertest]
+  tags: [install-python3-PyMySQL]
 
 # Firewalld configuration
 - name: Add the port '7080' to the firewalld

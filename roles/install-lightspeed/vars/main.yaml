@@ -1,4 +1,0 @@
----
-mariadb_root_password: "Password1"
-server_fqdn: example.com
-mariadb_socket: /var/lib/mysql/mysql.sock

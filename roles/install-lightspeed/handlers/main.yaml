@@ -3,12 +3,12 @@
   service:
     name: lsws
     state: restarted
-    enable: yes
+    enabled: yes
   tags: [restart-lsws]
 - name: restart-mariadb
   service:
     name: mariadb
     state: restarted
-    enable: yes
+    enabled: yes
   tags: [restart-mariadb]
   
