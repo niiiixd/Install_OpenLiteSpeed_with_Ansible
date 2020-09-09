@@ -5,13 +5,3 @@
 - hosts: litespeed
   roles:
     - database-configuration
-- hosts: litespeed
-  roles:
-    - install-dashboard
-  vars_prompt:
-  - name: "dashboar_username"
-    prompt: "Enter OpenLitespeed dashboar username"
-    private: no
-  - name: "dashboar_password"
-    prompt: "Enter OpenLitespeed dashboar password"
-    private: yes 
