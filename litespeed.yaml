@@ -1,7 +1,13 @@
 ---
-- hosts: lightspeed
+- hosts: litespeed
   roles:
-    - install-lightspeed
+    - install-litespeed
+- hosts: litespeed
+  roles:
+    - database-configuration
+- hosts: litespeed
+  roles:
+    - install-dashboard
   vars_prompt:
   - name: "dashboar_username"
     prompt: "Enter OpenLitespeed dashboar username"

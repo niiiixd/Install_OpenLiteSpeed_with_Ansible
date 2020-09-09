@@ -79,9 +79,3 @@
     permanent: yes
     state: enabled
   tags: [firewall]
-
-- name: set up the OpenLitespeed dashboard authentication
-  shell: sh /usr/local/lsws/admin/misc/admpass.sh
-  register: adminpass
-- debug: 
-    var: adminpass

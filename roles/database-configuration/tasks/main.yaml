@@ -4,7 +4,7 @@
     login_user: 'root'
     login_password: ''
     name: 'root'
-    password: '{{ mysql_pass }}'
+    password: '{{ mariadb_root_password }}'
     state: present
 
 - name: Set MariaDB root password for 127.0.0.1, ::1

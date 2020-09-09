@@ -1,5 +1,0 @@
-mariadb_root_password: "Password1"
-
-login: &amp;login
-  username: "{{ dashboar_username }}"
-  password: "{{ dashboar_password }}"
