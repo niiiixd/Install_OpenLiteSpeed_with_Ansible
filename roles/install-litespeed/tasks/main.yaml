@@ -71,11 +71,3 @@
     name: python3-PyMySQL
     state: present
   tags: [install-python3-PyMySQL]
-
-# Firewalld configuration
-- name: Add the port '7080' to the firewalld
-  firewalld:
-    port: 7080/tcp
-    permanent: yes
-    state: enabled
-  tags: [firewall]
